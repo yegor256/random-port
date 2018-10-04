@@ -45,5 +45,12 @@ module RandomPort
         assert(port.positive?)
       end
     end
+
+    def test_acquires_and_releases_from_singleton
+      Pool::SINGLETON.acquire do |port|
+        assert(!port.nil?)
+        assert(port.positive?)
+      end
+    end
   end
 end

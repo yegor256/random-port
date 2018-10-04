@@ -35,6 +35,9 @@ module RandomPort
       @mutex = Mutex.new
     end
 
+    # Application wide pool of ports
+    SINGLETON = Pool.new
+
     def acquire
       @mutex.synchronize do
         loop do

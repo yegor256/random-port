@@ -38,6 +38,14 @@ port = pool.acquire
 pool.release(port)
 ```
 
+You can also use a pre-defined `Pool::SINGLETON` singleton:
+
+```ruby
+RandomPort::Pool::SINGLETON.acquire do |port|
+  # Use it here...
+end
+```
+
 The pool is thread-safe.
 
 # License
