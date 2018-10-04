@@ -3,12 +3,20 @@
 
 [![Build Status](https://travis-ci.org/yegor256/random-port.svg)](https://travis-ci.org/yegor256/random-port)
 [![Gem Version](https://badge.fury.io/rb/random-port.svg)](http://badge.fury.io/rb/random-port)
-[![Dependency Status](https://gemnasium.com/yegor256/random-port.svg)](https://gemnasium.com/yegor256/random-port)
 [![Code Climate](http://img.shields.io/codeclimate/github/yegor256/random-port.svg)](https://codeclimate.com/github/yegor256/random-port)
 
-It's a simple Ruby gem to get a random TCP port:
+It's a simple Ruby gem to get a random TCP port.
+
+First, install it:
+
+```bash
+$ gem install random-port
+```
+
+Then, use it like this, to reserve a random TCP port:
 
 ```ruby
+require 'random-port'
 port = RandomPort::Pool.new.acquire
 ```
 
