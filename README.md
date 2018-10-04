@@ -3,7 +3,7 @@
 
 [![Build Status](https://travis-ci.org/yegor256/random-port.svg)](https://travis-ci.org/yegor256/random-port)
 [![Gem Version](https://badge.fury.io/rb/random-port.svg)](http://badge.fury.io/rb/random-port)
-[![Code Climate](http://img.shields.io/codeclimate/github/yegor256/random-port.svg)](https://codeclimate.com/github/yegor256/random-port)
+[![Maintainability](https://api.codeclimate.com/v1/badges/349b8c31884d3b34d926/maintainability)](https://codeclimate.com/github/yegor256/random-port/maintainability)
 
 It's a simple Ruby gem to get a random TCP port.
 
