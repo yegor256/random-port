@@ -1,0 +1,20 @@
+assets:
+  rubygems.yml: zerocracy/home#assets/rubygems.yml
+release:
+  script: |-
+    bundle install
+    rake
+    rm -rf *.gem
+    sed -i "s/0\.0\.0/${tag}/g" random-port.gemspec
+    git add random-port.gemspec
+    git commit -m "Version set to ${tag}"
+    gem build random-port.gemspec
+    chmod 0600 ../rubygems.yml
+    gem push *.gem --config-file ../rubygems.yml
+  commanders:
+  - yegor256
+architect:
+- yegor256
+merge:
+  commanders: []
+deploy: {}

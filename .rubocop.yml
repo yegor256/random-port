@@ -1,0 +1,20 @@
+AllCops:
+  DisplayCopNames: true
+  TargetRubyVersion: 2.3.3
+
+Style/FileName:
+  Enabled: false
+Metrics/MethodLength:
+  Max: 50
+Metrics/BlockLength:
+  Max: 50
+Style/ConditionalAssignment:
+  Enabled: false
+Style/ClassVars:
+  Enabled: false
+Metrics/PerceivedComplexity:
+  Max: 20
+Metrics/CyclomaticComplexity:
+  Max: 20
+Metrics/AbcSize:
+  Max: 60
