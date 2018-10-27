@@ -46,7 +46,7 @@ RandomPort::Pool::SINGLETON.acquire do |port|
 end
 ```
 
-The pool is thread-safe.
+The pool is _not_ thread-safe.
 
 # How to contribute
 

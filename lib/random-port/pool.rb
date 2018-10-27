@@ -26,38 +26,36 @@ require 'socket'
 
 module RandomPort
   # Pool of TPC ports.
+  #
+  # The class is NOT thread-safe!
+  #
   # Author:: Yegor Bugayenko (yegor256@gmail.com)
   # Copyright:: Copyright (c) 2018 Yegor Bugayenko
   # License:: MIT
   class Pool
     def initialize
       @ports = []
-      @mutex = Mutex.new
     end
 
     # Application wide pool of ports
     SINGLETON = Pool.new
 
     def acquire
-      @mutex.synchronize do
-        loop do
-          server = TCPServer.new('127.0.0.1', 0)
-          port = server.addr[1]
-          server.close
-          next if @ports.include?(port)
-          @ports << port
-          return port unless block_given?
-          yield port
-          @ports.delete(port)
-          break
-        end
+      loop do
+        server = TCPServer.new('127.0.0.1', 0)
+        port = server.addr[1]
+        server.close
+        next if @ports.include?(port)
+        @ports << port
+        return port unless block_given?
+        yield port
+        @ports.delete(port)
+        break
       end
     end
 
     def release(port)
-      @mutex.synchronize do
-        @ports.delete(port)
-      end
+      @ports.delete(port)
     end
   end
 end
