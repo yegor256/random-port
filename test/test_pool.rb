@@ -52,5 +52,11 @@ module RandomPort
         assert(port.positive?)
       end
     end
+
+    def test_acquires_unique_numbers
+      total = 25
+      numbers = (0..total - 1).map { Pool::SINGLETON.acquire }
+      assert_equal(total, numbers.uniq.count)
+    end
   end
 end

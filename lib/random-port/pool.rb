@@ -23,39 +23,62 @@
 # SOFTWARE.
 
 require 'socket'
+require 'monitor'
 
 module RandomPort
   # Pool of TPC ports.
   #
-  # The class is NOT thread-safe!
+  # Use it like this:
+  #
+  #  RandomPort::Pool.new.acquire do |port|
+  #    # Use the TCP port. It will be returned back
+  #    # to the pool afterwards.
+  #  end
+  #
+  # The class is thread-safe, by default. You can configure it to be
+  # not-thread-safe, using optional <tt>sync</tt> argument of the constructor.
   #
   # Author:: Yegor Bugayenko (yegor256@gmail.com)
   # Copyright:: Copyright (c) 2018 Yegor Bugayenko
   # License:: MIT
   class Pool
-    def initialize
+    def initialize(sync: false)
       @ports = []
+      @sync = sync
+      @monitor = Monitor.new
     end
 
     # Application wide pool of ports
     SINGLETON = Pool.new
 
+    # Acquire a new random TCP port.
     def acquire
       loop do
         server = TCPServer.new('127.0.0.1', 0)
         port = server.addr[1]
         server.close
         next if @ports.include?(port)
-        @ports << port
+        safe { @ports << port }
         return port unless block_given?
         yield port
-        @ports.delete(port)
+        safe { @ports.delete(port) }
         break
       end
     end
 
+    # Return it back to the pool.
     def release(port)
-      @ports.delete(port)
+      safe { @ports.delete(port) }
+    end
+
+    private
+
+    def safe
+      if @sync
+        @monitor.synchronize { yield }
+      else
+        yield
+      end
     end
   end
 end

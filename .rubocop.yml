@@ -2,7 +2,7 @@ AllCops:
   DisplayCopNames: true
   TargetRubyVersion: 2.3.3
 
-Style/FileName:
+Naming/FileName:
   Enabled: false
 Metrics/MethodLength:
   Max: 50

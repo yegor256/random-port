@@ -42,9 +42,9 @@ Gem::Specification.new do |s|
   s.test_files = s.files.grep(%r{^(test)/})
   s.rdoc_options = ['--charset=UTF-8']
   s.extra_rdoc_files = ['README.md']
-  s.add_development_dependency 'minitest', '~>5.11'
-  s.add_development_dependency 'rake', '~>12.3'
-  s.add_development_dependency 'rdoc', '~>4.2'
+  s.add_development_dependency 'minitest', '5.11.3'
+  s.add_development_dependency 'rake', '12.3.1'
+  s.add_development_dependency 'rdoc', '4.3.0'
   s.add_development_dependency 'rubocop', '0.58.1'
   s.add_development_dependency 'rubocop-rspec', '1.27.0'
 end

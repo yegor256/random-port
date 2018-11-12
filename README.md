@@ -47,7 +47,9 @@ RandomPort::Pool::SINGLETON.acquire do |port|
 end
 ```
 
-The pool is _not_ thread-safe.
+The pool is thread-safe by default.
+You can configure it to be
+not-thread-safe, using optional `sync` argument of the constructor.
 
 # How to contribute
 
