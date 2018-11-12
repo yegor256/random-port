@@ -58,5 +58,12 @@ module RandomPort
       numbers = (0..total - 1).map { Pool::SINGLETON.acquire }
       assert_equal(total, numbers.uniq.count)
     end
+
+    def test_acquires_unique_numbers_in_no_sync_mode
+      total = 25
+      pool = Pool.new(sync: false)
+      numbers = (0..total - 1).map { pool.acquire }
+      assert_equal(total, numbers.uniq.count)
+    end
   end
 end
