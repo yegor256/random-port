@@ -40,10 +40,12 @@ module RandomPort
     end
 
     def test_acquires_and_releases_in_block
-      Pool.new.acquire do |port|
+      result = Pool.new.acquire do |port|
         assert(!port.nil?)
         assert(port.positive?)
+        123
       end
+      assert_equal(123, result)
     end
 
     def test_acquires_and_releases_from_singleton

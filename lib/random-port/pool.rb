@@ -60,9 +60,9 @@ module RandomPort
         next if @ports.include?(port)
         safe { @ports << port }
         return port unless block_given?
-        yield port
+        result = yield port
         safe { @ports.delete(port) }
-        break
+        return result
       end
     end
 
