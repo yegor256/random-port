@@ -48,6 +48,16 @@ module RandomPort
       assert_equal(123, result)
     end
 
+    def test_acquires_and_releases_safely
+      pool = Pool.new
+      assert_raises do
+        pool.acquire do
+          raise 'Itended'
+        end
+      end
+      assert(pool.count.zero?)
+    end
+
     def test_acquires_and_releases_from_singleton
       Pool::SINGLETON.acquire do |port|
         assert(!port.nil?)

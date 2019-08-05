@@ -51,6 +51,16 @@ module RandomPort
     # Application wide pool of ports
     SINGLETON = Pool.new
 
+    # How many ports acquired now?
+    def count
+      @ports.count
+    end
+
+    # Is it empty?
+    def empty?
+      @ports.empty?
+    end
+
     # Acquire a new random TCP port.
     def acquire
       loop do
@@ -60,9 +70,11 @@ module RandomPort
         next if @ports.include?(port)
         safe { @ports << port }
         return port unless block_given?
-        result = yield port
-        safe { @ports.delete(port) }
-        return result
+        begin
+          return yield port
+        ensure
+          safe { @ports.delete(port) }
+        end
       end
     end
 
