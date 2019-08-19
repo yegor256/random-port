@@ -35,6 +35,9 @@ module RandomPort
   #    # to the pool afterwards.
   #  end
   #
+  # You can specify the maximum amount of ports to acquire, using +limit+.
+  # If more acquiring requests will arrive, an exception will be raised.
+  #
   # The class is thread-safe, by default. You can configure it to be
   # not-thread-safe, using optional <tt>sync</tt> argument of the constructor.
   #
@@ -42,10 +45,15 @@ module RandomPort
   # Copyright:: Copyright (c) 2018 Yegor Bugayenko
   # License:: MIT
   class Pool
-    def initialize(sync: false)
+    # If can't acquire by time out.
+    class Timeout < StandardError; end
+
+    # Ctor.
+    def initialize(sync: false, limit: 65_536)
       @ports = []
       @sync = sync
       @monitor = Monitor.new
+      @limit = limit
     end
 
     # Application wide pool of ports
@@ -62,13 +70,21 @@ module RandomPort
     end
 
     # Acquire a new random TCP port.
-    def acquire
+    #
+    # You can specify the amount of seconds to wait until a new port
+    # is available.
+    def acquire(timeout: 4)
+      start = Time.now
       loop do
+        raise Timeout if Time.now > start + timeout
+        next if @ports.count >= @limit
         server = TCPServer.new('127.0.0.1', 0)
         port = server.addr[1]
         server.close
-        next if @ports.include?(port)
-        safe { @ports << port }
+        safe do
+          next if @ports.include?(port)
+          @ports << port
+        end
         return port unless block_given?
         begin
           return yield port

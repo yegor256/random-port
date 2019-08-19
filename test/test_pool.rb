@@ -71,6 +71,14 @@ module RandomPort
       assert_equal(total, numbers.uniq.count)
     end
 
+    def test_raises_when_too_many
+      pool = Pool.new(limit: 1)
+      pool.acquire
+      assert_raises Pool::Timeout do
+        pool.acquire(timeout: 0.1)
+      end
+    end
+
     def test_acquires_unique_numbers_in_no_sync_mode
       total = 25
       pool = Pool.new(sync: false)
