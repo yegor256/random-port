@@ -76,7 +76,10 @@ module RandomPort
     def acquire(timeout: 4)
       start = Time.now
       loop do
-        raise Timeout if Time.now > start + timeout
+        if Time.now > start + timeout
+          raise Timeout, "Can't find a place in the pool of #{@limit} ports \
+in #{format('%.02f', Time.now - start)}s"
+        end
         next if @ports.count >= @limit
         server = TCPServer.new('127.0.0.1', 0)
         port = server.addr[1]
