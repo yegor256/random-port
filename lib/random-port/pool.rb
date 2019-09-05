@@ -48,6 +48,8 @@ module RandomPort
     # If can't acquire by time out.
     class Timeout < StandardError; end
 
+    attr_reader :limit
+
     # Ctor.
     def initialize(sync: false, limit: 65_536)
       @ports = []
