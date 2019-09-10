@@ -65,6 +65,7 @@ module RandomPort
     def count
       @ports.count
     end
+    alias size count
 
     # Is it empty?
     def empty?
@@ -107,7 +108,7 @@ for #{total} port(s), in #{format('%.02f', Time.now - start)}s"
         begin
           return yield opts
         ensure
-          safe { @ports.delete(opts) }
+          release(opts)
         end
       end
     end

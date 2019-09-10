@@ -40,10 +40,24 @@ module RandomPort
     end
 
     def test_acquires_and_releases_three_ports
-      pool = Pool.new
+      pool = Pool.new(limit: 3)
+      assert_equal(0, pool.size)
       ports = pool.acquire(3, timeout: 16)
+      assert_equal(3, pool.size)
       assert_equal(3, ports.count)
       pool.release(ports)
+      assert_equal(0, pool.size)
+    end
+
+    def test_acquires_and_releases_three_ports_in_block
+      pool = Pool.new(limit: 3)
+      assert_equal(0, pool.size)
+      pool.acquire(3, timeout: 16) do |ports|
+        assert(ports.is_a?(Array))
+        assert_equal(3, ports.count)
+        assert_equal(3, pool.size)
+      end
+      assert_equal(0, pool.size)
     end
 
     def test_acquires_and_releases_in_block
