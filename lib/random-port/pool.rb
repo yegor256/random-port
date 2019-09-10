@@ -73,38 +73,55 @@ module RandomPort
 
     # Acquire a new random TCP port.
     #
+    # You can specify the number of ports to acquire. If it's more than one,
+    # an array will be returned.
+    #
     # You can specify the amount of seconds to wait until a new port
     # is available.
-    def acquire(timeout: 4)
+    def acquire(total = 1, timeout: 4)
       start = Time.now
       loop do
         if Time.now > start + timeout
           raise Timeout, "Can't find a place in the pool of #{@limit} ports \
-in #{format('%.02f', Time.now - start)}s"
+for #{total} port(s), in #{format('%.02f', Time.now - start)}s"
         end
-        next if @ports.count >= @limit
-        server = TCPServer.new('127.0.0.1', 0)
-        port = server.addr[1]
-        server.close
-        safe do
-          next if @ports.include?(port)
-          @ports << port
+        opts = safe do
+          next if @ports.count + total > @limit
+          opts = (0..(total - 1)).map { take }
+          next if opts.any? { |p| @ports.include?(p) }
+          @ports += opts
+          opts
         end
-        return port unless block_given?
+        next if opts.nil?
+        opts = opts[0] if total == 1
+        return opts unless block_given?
         begin
-          return yield port
+          return yield opts
         ensure
-          safe { @ports.delete(port) }
+          safe { @ports.delete(opts) }
         end
       end
     end
 
-    # Return it back to the pool.
+    # Return it/them back to the pool.
     def release(port)
-      safe { @ports.delete(port) }
+      safe do
+        if port.is_a?(Array)
+          port.each { |p| @ports.delete(p) }
+        else
+          @ports.delete(port)
+        end
+      end
     end
 
     private
+
+    def take
+      server = TCPServer.new('127.0.0.1', 0)
+      p = server.addr[1]
+      server.close
+      p
+    end
 
     def safe
       if @sync

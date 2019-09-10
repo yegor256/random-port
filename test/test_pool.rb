@@ -39,6 +39,13 @@ module RandomPort
       pool.release(port)
     end
 
+    def test_acquires_and_releases_three_ports
+      pool = Pool.new
+      ports = pool.acquire(3)
+      assert_equal(3, ports.count)
+      pool.release(ports)
+    end
+
     def test_acquires_and_releases_in_block
       result = Pool.new.acquire do |port|
         assert(!port.nil?)
