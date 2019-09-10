@@ -87,9 +87,16 @@ for #{total} port(s), in #{format('%.02f', Time.now - start)}s"
         end
         opts = safe do
           next if @ports.count + total > @limit
-          opts = (0..(total - 1)).map { take }
+          opts = Array.new(0, total)
+          begin
+            (0..(total - 1)).each do |i|
+              opts[i] = i.zero? ? take : take(opts[i - 1] + 1)
+            end
+          rescue Errno::EADDRINUSE, SocketError
+            next
+          end
           next if opts.any? { |p| @ports.include?(p) }
-          d = (total * total - 1) / 2
+          d = total * (total - 1) / 2
           next unless opts.inject(&:+) - total * opts.min == d
           @ports += opts
           opts
@@ -118,8 +125,8 @@ for #{total} port(s), in #{format('%.02f', Time.now - start)}s"
 
     private
 
-    def take
-      server = TCPServer.new('127.0.0.1', 0)
+    def take(opt = 0)
+      server = TCPServer.new('127.0.0.1', opt)
       p = server.addr[1]
       server.close
       p
