@@ -31,7 +31,7 @@ Gem::Specification.new do |s|
   s.rubygems_version = '2.3.3'
   s.required_ruby_version = '>=2.3'
   s.name = 'random-port'
-  s.version = '0.0.0'
+  s.version = '0.5.0'
   s.license = 'MIT'
   s.summary = 'Random TCP port'
   s.description = 'Reserves a random TCP port'
