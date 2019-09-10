@@ -89,6 +89,8 @@ for #{total} port(s), in #{format('%.02f', Time.now - start)}s"
           next if @ports.count + total > @limit
           opts = (0..(total - 1)).map { take }
           next if opts.any? { |p| @ports.include?(p) }
+          d = (total * total - 1) / 2
+          next unless opts.inject(&:+) - total * opts.min == d
           @ports += opts
           opts
         end
