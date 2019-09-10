@@ -41,7 +41,7 @@ module RandomPort
 
     def test_acquires_and_releases_three_ports
       pool = Pool.new
-      ports = pool.acquire(3)
+      ports = pool.acquire(3, timeout: 16)
       assert_equal(3, ports.count)
       pool.release(ports)
     end
