@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# (The MIT License)
+#
 # Copyright (c) 2018 Yegor Bugayenko
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,33 +22,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-require 'rubygems'
-require 'rake'
-require 'rake/clean'
-
-CLEAN << 'coverage'
-
-def name
-  @name ||= File.basename(Dir['*.gemspec'].first, '.*')
-end
-
-def version
-  Gem::Specification.load(Dir['*.gemspec'].first).version
-end
-
-task default: %i[clean test rubocop]
-
-require 'rake/testtask'
-desc 'Run all unit tests'
-Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = false
-end
-
-require 'rubocop/rake_task'
-desc 'Run RuboCop on all directories'
-RuboCop::RakeTask.new(:rubocop) do |task|
-  task.fail_on_error = true
-  task.requires << 'rubocop-rspec'
+# The module for all classes.
+#
+# Author:: Yegor Bugayenko (yegor256@gmail.com)
+# Copyright:: Copyright (c) 2018 Yegor Bugayenko
+# License:: MIT
+module RandomPort
 end

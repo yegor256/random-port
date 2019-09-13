@@ -24,7 +24,7 @@
 
 require 'socket'
 require 'monitor'
-require_relative '../random-port'
+require_relative 'module'
 
 # Pool of TPC ports.
 #

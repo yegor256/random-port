@@ -23,6 +23,7 @@
 # SOFTWARE.
 
 require 'minitest/autorun'
+require 'threads'
 require_relative '../lib/random-port/pool'
 
 # Pool test.
@@ -76,6 +77,18 @@ class RandomPort::TestPool < Minitest::Test
       123
     end
     assert_equal(123, result)
+  end
+
+  def test_acquires_and_releases_in_threads
+    pool = RandomPort::Pool.new
+    Threads.new(100).assert do
+      pool.acquire(5) do |ports|
+        ports.each do |p|
+          server = TCPServer.new(p)
+          server.close
+        end
+      end
+    end
   end
 
   def test_acquires_and_releases_safely

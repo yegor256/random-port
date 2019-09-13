@@ -48,4 +48,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rdoc', '4.3.0'
   s.add_development_dependency 'rubocop', '0.58.1'
   s.add_development_dependency 'rubocop-rspec', '1.27.0'
+  s.add_development_dependency 'threads', '0.3.0'
 end

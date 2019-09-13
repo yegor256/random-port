@@ -22,12 +22,5 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# The module for all classes.
-#
-# Author:: Yegor Bugayenko (yegor256@gmail.com)
-# Copyright:: Copyright (c) 2018 Yegor Bugayenko
-# License:: MIT
-module RandomPort
-end
-
-require 'random-port/pool'
+require_relative 'random-port/module'
+require_relative 'random-port/pool'
