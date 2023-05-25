@@ -98,7 +98,7 @@ for #{total} port(s), in #{format('%.02f', Time.now - start)}s"
         end
         next if opts.any? { |p| @ports.include?(p) }
         d = total * (total - 1) / 2
-        next unless opts.inject(&:+) - total * opts.min == d
+        next unless opts.inject(&:+) - (total * opts.min) == d
         @ports += opts
         opts
       end
@@ -133,9 +133,9 @@ for #{total} port(s), in #{format('%.02f', Time.now - start)}s"
     p
   end
 
-  def safe
+  def safe(&block)
     if @sync
-      @monitor.synchronize { yield }
+      @monitor.synchronize(&block)
     else
       yield
     end
