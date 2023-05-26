@@ -39,7 +39,8 @@ require_relative 'module'
 # If more acquiring requests will arrive, an exception will be raised.
 #
 # The class is thread-safe, by default. You can configure it to be
-# not-thread-safe, using optional <tt>sync</tt> argument of the constructor.
+# not-thread-safe, using optional +sync+ argument of the constructor,
+# passing <tt>FALSE</tt>.
 #
 # Author:: Yegor Bugayenko (yegor256@gmail.com)
 # Copyright:: Copyright (c) 2018 Yegor Bugayenko
@@ -51,7 +52,9 @@ class RandomPort::Pool
   attr_reader :limit
 
   # Ctor.
-  def initialize(sync: false, limit: 65_536)
+  # @param [bool] Set it to FALSE if you want this pool to be NOT thread-safe
+  # @param [int] Set the maximum number of ports in the pool
+  def initialize(sync: true, limit: 65_536)
     @ports = []
     @sync = sync
     @monitor = Monitor.new
