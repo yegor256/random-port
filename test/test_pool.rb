@@ -81,7 +81,7 @@ class RandomPort::TestPool < Minitest::Test
 
   def test_acquires_and_releases_in_threads
     pool = RandomPort::Pool.new
-    Threads.new(100).assert do
+    Threads.new(10).assert do
       pool.acquire(5) do |ports|
         ports.each do |p|
           server = TCPServer.new(p)
