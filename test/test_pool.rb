@@ -24,6 +24,7 @@
 
 require 'minitest/autorun'
 require 'threads'
+require 'socket'
 require_relative '../lib/random-port/pool'
 
 # Pool test.
@@ -34,7 +35,7 @@ class RandomPort::TestPool < Minitest::Test
   def test_acquires_and_releases
     pool = RandomPort::Pool.new
     port = pool.acquire
-    server = TCPServer.new(port)
+    server = TCPServer.new('localhost', port)
     server.close
     assert(!port.nil?)
     assert(port.positive?)
@@ -46,7 +47,7 @@ class RandomPort::TestPool < Minitest::Test
     assert_equal(0, pool.size)
     ports = pool.acquire(3, timeout: 16)
     ports.each do |p|
-      server = TCPServer.new(p)
+      server = TCPServer.new('localhost', p)
       server.close
     end
     assert_equal(3, pool.size)
@@ -63,7 +64,7 @@ class RandomPort::TestPool < Minitest::Test
       assert_equal(3, ports.count)
       assert_equal(3, pool.size)
       ports.each do |p|
-        server = TCPServer.new(p)
+        server = TCPServer.new('localhost', p)
         server.close
       end
     end
@@ -84,7 +85,7 @@ class RandomPort::TestPool < Minitest::Test
     Threads.new(100).assert do
       pool.acquire(5) do |ports|
         ports.each do |p|
-          server = TCPServer.new(p)
+          server = TCPServer.new('localhost', p)
           server.close
         end
       end
