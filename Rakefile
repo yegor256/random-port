@@ -34,7 +34,7 @@ def version
   Gem::Specification.load(Dir['*.gemspec'].first).version
 end
 
-task default: %i[clean test rubocop]
+task default: %i[clean test yard rubocop]
 
 require 'rake/testtask'
 desc 'Run all unit tests'
@@ -49,4 +49,10 @@ desc 'Run RuboCop on all directories'
 RuboCop::RakeTask.new(:rubocop) do |task|
   task.fail_on_error = true
   task.requires << 'rubocop-rspec'
+end
+
+require 'yard'
+desc 'Build Yard documentation'
+YARD::Rake::YardocTask.new do |t|
+  t.files = ['lib/**/*.rb']
 end
