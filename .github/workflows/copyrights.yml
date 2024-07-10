@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Copyright (c) 2018-2024 Yegor Bugayenko
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,40 +17,14 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-
-require 'rubygems'
-require 'rake'
-require 'rake/clean'
-
-CLEAN << 'coverage'
-
-def name
-  @name ||= File.basename(Dir['*.gemspec'].first, '.*')
-end
-
-def version
-  Gem::Specification.load(Dir['*.gemspec'].first).version
-end
-
-task default: %i[clean test yard rubocop]
-
-require 'rake/testtask'
-desc 'Run all unit tests'
-Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = false
-end
-
-require 'rubocop/rake_task'
-desc 'Run RuboCop on all directories'
-RuboCop::RakeTask.new(:rubocop) do |task|
-  task.fail_on_error = true
-  task.requires << 'rubocop-rspec'
-end
-
-require 'yard'
-desc 'Build Yard documentation'
-YARD::Rake::YardocTask.new do |t|
-  t.files = ['lib/**/*.rb']
-end
+---
+name: copyrights
+'on':
+  push:
+  pull_request:
+jobs:
+  copyrights:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: yegor256/copyrights-action@0.0.4
