@@ -1,3 +1,5 @@
+# Random TCP Port Generator for Ruby
+
 [![DevOps By Rultor.com](http://www.rultor.com/b/yegor256/random-port)](http://www.rultor.com/p/yegor256/random-port)
 [![We recommend RubyMine](http://www.elegantobjects.org/rubymine.svg)](https://www.jetbrains.com/ruby/)
 
@@ -14,7 +16,7 @@ It's a simple Ruby gem to get a random TCP port.
 First, install it:
 
 ```bash
-$ gem install random-port
+gem install random-port
 ```
 
 Then, use it like this, to reserve a random TCP port:
@@ -56,14 +58,16 @@ not-thread-safe, using optional `sync` argument of the constructor.
 
 ## How to contribute
 
-Read [these guidelines](https://www.yegor256.com/2014/04/15/github-guidelines.html).
+Read
+[these guidelines](https://www.yegor256.com/2014/04/15/github-guidelines.html).
 Make sure you build is green before you contribute
-your pull request. You will need to have [Ruby](https://www.ruby-lang.org/en/) 2.3+ and
+your pull request. You will need to have
+[Ruby](https://www.ruby-lang.org/en/) 2.3+ and
 [Bundler](https://bundler.io/) installed. Then:
 
-```
-$ bundle update
-$ bundle exec rake
+```bash
+bundle update
+bundle exec rake
 ```
 
 If it's clean and you don't see any error messages, submit your pull request.
