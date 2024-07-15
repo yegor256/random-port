@@ -110,6 +110,7 @@ class RandomPort::Pool
       end
       next if opts.nil?
       @next = opts.max + 1
+      @next = 0 if @next > 65_535
       opts = opts[0] if total == 1
       return opts unless block_given?
       begin
