@@ -115,6 +115,16 @@ class RandomPort::TestPool < Minitest::Test
     assert_equal(total, numbers.uniq.count)
   end
 
+  def test_acquires_unique_numbers_in_block
+    total = 25
+    numbers = (0..total - 1).map do
+      RandomPort::Pool::SINGLETON.acquire do |port|
+        port
+      end
+    end
+    assert_equal(total, numbers.uniq.count)
+  end
+
   def test_raises_when_too_many
     pool = RandomPort::Pool.new(limit: 1)
     pool.acquire

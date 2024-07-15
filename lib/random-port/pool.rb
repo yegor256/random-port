@@ -52,13 +52,14 @@ class RandomPort::Pool
   attr_reader :limit
 
   # Ctor.
-  # @param [bool] Set it to FALSE if you want this pool to be NOT thread-safe
-  # @param [int] Set the maximum number of ports in the pool
+  # @param [Boolean] sync Set it to FALSE if you want this pool to be NOT thread-safe
+  # @param [Integer] limit Set the maximum number of ports in the pool
   def initialize(sync: true, limit: 65_536)
     @ports = []
     @sync = sync
     @monitor = Monitor.new
     @limit = limit
+    @next = 0
   end
 
   # Application wide pool of ports
@@ -96,7 +97,7 @@ class RandomPort::Pool
         opts = Array.new(0, total)
         begin
           (0..(total - 1)).each do |i|
-            opts[i] = i.zero? ? take : take(opts[i - 1] + 1)
+            opts[i] = take(i.zero? ? @next : opts[i - 1] + 1)
           end
         rescue Errno::EADDRINUSE, SocketError
           next
@@ -108,6 +109,7 @@ class RandomPort::Pool
         opts
       end
       next if opts.nil?
+      @next = opts.max + 1
       opts = opts[0] if total == 1
       return opts unless block_given?
       begin
@@ -131,6 +133,9 @@ class RandomPort::Pool
 
   private
 
+  # Find one possible TCP port.
+  # @param [Integer] opt Suggested port number
+  # @return [Integer] Port found
   def take(opt = 0)
     server = TCPServer.new('127.0.0.1', opt)
     p = server.addr[1]
