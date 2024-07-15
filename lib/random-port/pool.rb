@@ -86,8 +86,10 @@ class RandomPort::Pool
     start = Time.now
     loop do
       if Time.now > start + timeout
-        raise Timeout, "Can't find a place in the pool of #{@limit} ports \
-for #{total} port(s), in #{format('%.02f', Time.now - start)}s"
+        raise \
+          Timeout,
+          "Can't find a place in the pool of #{@limit} ports " \
+          "for #{total} port(s), in #{format('%.02f', Time.now - start)}s"
       end
       opts = safe do
         next if @ports.count + total > @limit
