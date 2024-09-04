@@ -29,4 +29,4 @@ gem 'rubocop', '1.66.0', require: false
 gem 'rubocop-rspec', '3.0.4', require: false
 gem 'simplecov', '0.22.0', require: false
 gem 'threads', '0.4.0', require: false
-gem 'yard', '0.9.36', require: false
+gem 'yard', '0.9.37', require: false
