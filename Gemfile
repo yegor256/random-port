@@ -28,5 +28,5 @@ gem 'rake', '13.2.1', require: false
 gem 'rubocop', '1.67.0', require: false
 gem 'rubocop-rspec', '3.2.0', require: false
 gem 'simplecov', '0.22.0', require: false
-gem 'threads', '0.4.0', require: false
+gem 'threads', '0.4.1', require: false
 gem 'yard', '0.9.37', require: false
