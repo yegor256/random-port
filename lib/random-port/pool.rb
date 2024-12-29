@@ -115,6 +115,8 @@ class RandomPort::Pool
   end
 
   # Return it/them back to the pool.
+  # @param [Integer] port TCP port number to release
+  # @return nil
   def release(port)
     safe do
       if port.is_a?(Array)
