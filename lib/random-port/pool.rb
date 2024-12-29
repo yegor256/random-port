@@ -97,9 +97,13 @@ class RandomPort::Pool
       end
       attempt +=  1
       opts = safe { group(total) }
-      next if opts.nil?
-      @next = opts.max + 1
+      if opts.nil?
+        @next += 1
+      else
+        @next = opts.max + 1
+      end
       @next = 0 if @next > 65_535
+      next if opts.nil?
       opts = opts[0] if total == 1
       return opts unless block_given?
       begin
@@ -131,7 +135,8 @@ class RandomPort::Pool
     opts = Array.new(0, total)
     begin
       (0..(total - 1)).each do |i|
-        opts[i] = take(i.zero? ? @next : opts[i - 1] + 1)
+        port = i.zero? ? @next : opts[i - 1] + 1
+        opts[i] = take(port)
       end
     rescue Errno::EADDRINUSE, SocketError
       return
