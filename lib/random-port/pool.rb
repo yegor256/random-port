@@ -60,7 +60,7 @@ class RandomPort::Pool
     @sync = sync
     @monitor = Monitor.new
     @limit = limit
-    @next = 0
+    @next = 1024
   end
 
   # Application wide pool of ports
