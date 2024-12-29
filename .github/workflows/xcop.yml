@@ -19,9 +19,13 @@
 # SOFTWARE.
 ---
 name: xcop
-on:
+'on':
   push:
+    branches:
+      - master
   pull_request:
+    branches:
+      - master
 jobs:
   xcop:
     runs-on: ubuntu-24.04
