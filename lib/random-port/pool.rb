@@ -96,22 +96,7 @@ class RandomPort::Pool
           "for #{total} port(s), after #{attempt} attempts in #{start.ago}"
       end
       attempt +=  1
-      opts = safe do
-        next if @ports.count + total > @limit
-        opts = Array.new(0, total)
-        begin
-          (0..(total - 1)).each do |i|
-            opts[i] = take(i.zero? ? @next : opts[i - 1] + 1)
-          end
-        rescue Errno::EADDRINUSE, SocketError
-          next
-        end
-        next if opts.any? { |p| @ports.include?(p) }
-        d = total * (total - 1) / 2
-        next unless opts.inject(&:+) - (total * opts.min) == d
-        @ports += opts
-        opts
-      end
+      opts = safe { group(total) }
       next if opts.nil?
       @next = opts.max + 1
       @next = 0 if @next > 65_535
@@ -137,6 +122,23 @@ class RandomPort::Pool
   end
 
   private
+
+  def group(total)
+    return if @ports.count + total > @limit
+    opts = Array.new(0, total)
+    begin
+      (0..(total - 1)).each do |i|
+        opts[i] = take(i.zero? ? @next : opts[i - 1] + 1)
+      end
+    rescue Errno::EADDRINUSE, SocketError
+      return
+    end
+    return if opts.any? { |p| @ports.include?(p) }
+    d = total * (total - 1) / 2
+    return unless opts.inject(&:+) - (total * opts.min) == d
+    @ports += opts
+    opts
+  end
 
   # Find one possible TCP port.
   # @param [Integer] opt Suggested port number
