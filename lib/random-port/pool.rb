@@ -22,8 +22,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-require 'socket'
 require 'monitor'
+require 'socket'
+require 'tago'
 require_relative 'module'
 
 # Pool of TPC ports.
@@ -85,13 +86,15 @@ class RandomPort::Pool
   # is available.
   def acquire(total = 1, timeout: 4)
     start = Time.now
+    attempt = 0
     loop do
       if Time.now > start + timeout
         raise \
           Timeout,
           "Can't find a place in the pool of #{@limit} ports " \
-          "for #{total} port(s), in #{format('%.02f', Time.now - start)}s"
+          "for #{total} port(s), after #{attempt} attempts in #{start.ago}"
       end
+      attempt +=  1
       opts = safe do
         next if @ports.count + total > @limit
         opts = Array.new(0, total)
