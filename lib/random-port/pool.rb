@@ -92,6 +92,7 @@ class RandomPort::Pool
         raise \
           Timeout,
           "Can't find a place in the pool of #{@limit} ports " \
+          "(#{@ports.size} already occupied) " \
           "for #{total} port(s), after #{attempt} attempts in #{start.ago}"
       end
       attempt +=  1
