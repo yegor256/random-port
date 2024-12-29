@@ -123,6 +123,9 @@ class RandomPort::Pool
 
   private
 
+  # Take a group of ports, if possible.
+  # @param [Integer] total How many ports to take
+  # @return [Array<Integer>|nil] Ports found or NIL if impossible now
   def group(total)
     return if @ports.count + total > @limit
     opts = Array.new(0, total)
