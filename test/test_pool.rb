@@ -69,7 +69,8 @@ class RandomPort::TestPool < Minitest::Test
   def test_skips_externally_busy_port
     Dir.mktmpdir do |home|
       port = RandomPort::Pool.new.acquire
-      flag = File.join(home, 'started.txt')
+      started = File.join(home, 'started.txt')
+      enough = File.join(home, 'enough.txt')
       t =
         Thread.new do
           qbash(
@@ -80,18 +81,21 @@ class RandomPort::TestPool < Minitest::Test
                 require 'socket'
                 require 'fileutils'
                 TCPServer.new('127.0.0.1', #{port})
-                FileUtils.touch('#{flag}')
-                sleep 9999
+                FileUtils.touch('#{started}')
+                loop do
+                  break if File.exist?('#{enough}')
+                end
                 "
               )
             ]
           )
         end
       loop do
-        break if File.exist?(flag)
+        break if File.exist?(started)
       end
       other = RandomPort::Pool.new(start: port).acquire
-      t.kill
+      FileUtils.touch(enough)
+      t.join
       assert(other != port)
     end
   end
