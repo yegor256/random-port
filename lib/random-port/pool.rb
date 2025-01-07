@@ -55,12 +55,13 @@ class RandomPort::Pool
   # Ctor.
   # @param [Boolean] sync Set it to FALSE if you want this pool to be NOT thread-safe
   # @param [Integer] limit Set the maximum number of ports in the pool
-  def initialize(sync: true, limit: 65_536)
+  # @param [Integer] start The next port to try
+  def initialize(sync: true, limit: 65_536, start: 1025)
     @ports = []
     @sync = sync
     @monitor = Monitor.new
     @limit = limit
-    @next = 1024
+    @next = start
   end
 
   # Application wide pool of ports
@@ -133,7 +134,7 @@ class RandomPort::Pool
   # @param [Integer] total How many ports to take
   # @return [Array<Integer>|nil] Ports found or NIL if impossible now
   def group(total)
-    return if @ports.count + total > @limit
+    return nil if @ports.count + total > @limit
     opts = Array.new(0, total)
     begin
       (0..(total - 1)).each do |i|
@@ -155,9 +156,9 @@ class RandomPort::Pool
   # @return [Integer] Port found
   def take(opt = 0)
     server = TCPServer.new('127.0.0.1', opt)
-    p = server.addr[1]
+    port = server.addr[1]
     server.close
-    p
+    port
   end
 
   def safe(&block)

@@ -56,6 +56,14 @@ class RandomPort::TestPool < Minitest::Test
     assert_equal(0, pool.size)
   end
 
+  def test_skips_truly_busy_port
+    port = RandomPort::Pool.new.acquire
+    server = TCPServer.new('127.0.0.1', 1025)
+    other = RandomPort::Pool.new(start: port).acquire
+    assert(other != port)
+    server.close
+  end
+
   def test_acquires_and_releases_three_ports_in_block
     pool = RandomPort::Pool.new(limit: 3)
     assert_equal(0, pool.size)
