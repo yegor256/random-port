@@ -23,8 +23,10 @@
 # SOFTWARE.
 
 require 'minitest/autorun'
-require 'threads'
+require 'qbash'
+require 'shellwords'
 require 'socket'
+require 'threads'
 require_relative '../lib/random-port/pool'
 
 # Pool test.
@@ -62,6 +64,36 @@ class RandomPort::TestPool < Minitest::Test
     other = RandomPort::Pool.new(start: port).acquire
     assert(other != port)
     server.close
+  end
+
+  def test_skips_externally_busy_port
+    Dir.mktmpdir do |home|
+      port = RandomPort::Pool.new.acquire
+      flag = File.join(home, 'started.txt')
+      t =
+        Thread.new do
+          qbash(
+            [
+              'ruby', '-e',
+              Shellwords.escape(
+                "
+                require 'socket'
+                require 'fileutils'
+                TCPServer.new('127.0.0.1', #{port})
+                FileUtils.touch('#{flag}')
+                sleep 9999
+                "
+              )
+            ]
+          )
+        end
+      loop do
+        break if File.exist?(flag)
+      end
+      other = RandomPort::Pool.new(start: port).acquire
+      t.kill
+      assert(other != port)
+    end
   end
 
   def test_acquires_and_releases_three_ports_in_block
