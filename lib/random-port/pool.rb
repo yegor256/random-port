@@ -141,11 +141,11 @@ class RandomPort::Pool
         opts[i] = take(port)
       end
     rescue Errno::EADDRINUSE, SocketError
-      return
+      return nil
     end
-    return if opts.any? { |p| @ports.include?(p) }
+    return nil if opts.any? { |p| @ports.include?(p) }
     d = total * (total - 1) / 2
-    return unless opts.inject(&:+) - (total * opts.min) == d
+    return nil unless opts.inject(&:+) - (total * opts.min) == d
     @ports += opts
     opts
   end
