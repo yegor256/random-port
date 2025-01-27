@@ -67,7 +67,7 @@ class RandomPort::TestPool < Minitest::Test
   end
 
   def test_skips_externally_busy_port
-    ['127.0.0.1'].each do |host|
+    ['127.0.0.1', 'localhost'].each do |host|
       Dir.mktmpdir do |home|
         port = RandomPort::Pool.new.acquire
         started = File.join(home, 'started.txt')

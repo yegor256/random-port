@@ -151,13 +151,16 @@ class RandomPort::Pool
     opts
   end
 
-  # Find one possible TCP port.
-  # @param [Integer] opt Suggested port number
-  # @return [Integer] Port found
-  def take(opt = 0)
-    server = TCPServer.new('127.0.0.1', opt)
-    port = server.addr[1]
-    server.close
+  # Find one possible TCP port or raise exception if this port can't be used.
+  #
+  # If port is occupied, this method raises an error (+Errno::EADDRINUSE+).
+  #
+  # @param [Integer] port Suggested port number
+  # @return [Integer] The same port number
+  def take(port)
+    ['127.0.0.1', '::1'].each do |host|
+      TCPServer.new(host, port).close
+    end
     port
   end
 
