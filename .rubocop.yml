@@ -23,7 +23,11 @@ AllCops:
   TargetRubyVersion: 2.3.3
   NewCops: enable
   SuggestExtensions: false
+require:
+  - rubocop-minitest
 
+Minitest/EmptyLineBeforeAssertionMethods:
+  Enabled: false
 Layout/EmptyLineAfterGuardClause:
   Enabled: false
 Style/ClassAndModuleChildren:

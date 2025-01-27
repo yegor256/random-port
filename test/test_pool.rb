@@ -39,8 +39,8 @@ class RandomPort::TestPool < Minitest::Test
     port = pool.acquire
     server = TCPServer.new('localhost', port)
     server.close
-    assert(!port.nil?)
-    assert(port.positive?)
+    refute_nil(port)
+    assert_predicate(port, :positive?)
     pool.release(port)
   end
 
@@ -62,41 +62,43 @@ class RandomPort::TestPool < Minitest::Test
     port = RandomPort::Pool.new.acquire
     server = TCPServer.new('127.0.0.1', 1025)
     other = RandomPort::Pool.new(start: port).acquire
-    assert(other != port)
+    refute_equal(other, port)
     server.close
   end
 
   def test_skips_externally_busy_port
-    Dir.mktmpdir do |home|
-      port = RandomPort::Pool.new.acquire
-      started = File.join(home, 'started.txt')
-      enough = File.join(home, 'enough.txt')
-      t =
-        Thread.new do
-          qbash(
-            [
-              'ruby', '-e',
-              Shellwords.escape(
-                "
-                require 'socket'
-                require 'fileutils'
-                TCPServer.new('127.0.0.1', #{port})
-                FileUtils.touch('#{started}')
-                loop do
-                  break if File.exist?('#{enough}')
-                end
-                "
-              )
-            ]
-          )
+    ['127.0.0.1'].each do |host|
+      Dir.mktmpdir do |home|
+        port = RandomPort::Pool.new.acquire
+        started = File.join(home, 'started.txt')
+        enough = File.join(home, 'enough.txt')
+        t =
+          Thread.new do
+            qbash(
+              [
+                'ruby', '-e',
+                Shellwords.escape(
+                  "
+                  require 'socket'
+                  require 'fileutils'
+                  TCPServer.new('#{host}', #{port})
+                  FileUtils.touch('#{started}')
+                  loop do
+                    break if File.exist?('#{enough}')
+                  end
+                  "
+                )
+              ]
+            )
+          end
+        loop do
+          break if File.exist?(started)
         end
-      loop do
-        break if File.exist?(started)
+        other = RandomPort::Pool.new(start: port).acquire
+        FileUtils.touch(enough)
+        t.join
+        refute_equal(other, port)
       end
-      other = RandomPort::Pool.new(start: port).acquire
-      FileUtils.touch(enough)
-      t.join
-      assert(other != port)
     end
   end
 
@@ -104,7 +106,7 @@ class RandomPort::TestPool < Minitest::Test
     pool = RandomPort::Pool.new(limit: 3)
     assert_equal(0, pool.size)
     pool.acquire(3, timeout: 16) do |ports|
-      assert(ports.is_a?(Array))
+      assert_kind_of(Array, ports)
       assert_equal(3, ports.count)
       assert_equal(3, pool.size)
       ports.each do |p|
@@ -117,8 +119,8 @@ class RandomPort::TestPool < Minitest::Test
 
   def test_acquires_and_releases_in_block
     result = RandomPort::Pool.new.acquire do |port|
-      assert(!port.nil?)
-      assert(port.positive?)
+      refute_nil(port)
+      assert_predicate(port, :positive?)
       123
     end
     assert_equal(123, result)
@@ -138,18 +140,18 @@ class RandomPort::TestPool < Minitest::Test
 
   def test_acquires_and_releases_safely
     pool = RandomPort::Pool.new
-    assert_raises do
+    assert_raises(StandardError) do
       pool.acquire do
         raise 'Itended'
       end
     end
-    assert(pool.count.zero?)
+    assert_predicate(pool.count, :zero?)
   end
 
   def test_acquires_and_releases_from_singleton
     RandomPort::Pool::SINGLETON.acquire do |port|
-      assert(!port.nil?)
-      assert(port.positive?)
+      refute_nil(port)
+      assert_predicate(port, :positive?)
     end
   end
 
