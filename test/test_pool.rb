@@ -67,6 +67,7 @@ class RandomPort::TestPool < Minitest::Test
   end
 
   def test_skips_externally_busy_port
+    skip 'Not supported on Windows' if Gem.win_platform?
     ['127.0.0.1', 'localhost', '::1', '0.0.0.0'].each do |host|
       Dir.mktmpdir do |home|
         port = RandomPort::Pool.new.acquire
