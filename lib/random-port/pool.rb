@@ -158,7 +158,7 @@ class RandomPort::Pool
   # @param [Integer] port Suggested port number
   # @return [Integer] The same port number
   def take(port)
-    ['127.0.0.1', '::1'].each do |host|
+    ['127.0.0.1', '::1', '0.0.0.0', 'localhost'].each do |host|
       TCPServer.new(host, port).close
     end
     port

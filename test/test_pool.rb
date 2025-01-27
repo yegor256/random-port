@@ -60,14 +60,14 @@ class RandomPort::TestPool < Minitest::Test
 
   def test_skips_truly_busy_port
     port = RandomPort::Pool.new.acquire
-    server = TCPServer.new('127.0.0.1', 1025)
+    server = TCPServer.new('127.0.0.1', port)
     other = RandomPort::Pool.new(start: port).acquire
     refute_equal(other, port)
     server.close
   end
 
   def test_skips_externally_busy_port
-    ['127.0.0.1', 'localhost'].each do |host|
+    ['127.0.0.1', 'localhost', '::1', '0.0.0.0'].each do |host|
       Dir.mktmpdir do |home|
         port = RandomPort::Pool.new.acquire
         started = File.join(home, 'started.txt')
