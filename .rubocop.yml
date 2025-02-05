@@ -25,6 +25,8 @@ AllCops:
   SuggestExtensions: false
 require:
   - rubocop-minitest
+  - rubocop-rake
+  - rubocop-performance
 Minitest/EmptyLineBeforeAssertionMethods:
   Enabled: false
 Layout/EmptyLineAfterGuardClause:
@@ -49,6 +51,3 @@ Metrics/AbcSize:
   Max: 60
 Metrics/ClassLength:
   Max: 150
-required:
-  - rubocop-rake
-  - rubocop-performance
