@@ -22,7 +22,7 @@ GEM
     parser (3.3.7.0)
       ast (~> 2.4.1)
       racc
-    qbash (0.3.0)
+    qbash (0.4.0)
       backtrace (> 0)
       elapsed (> 0)
       loog (> 0)
