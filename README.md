@@ -1,12 +1,12 @@
 # Random TCP Port Generator for Ruby
 
-[![DevOps By Rultor.com](http://www.rultor.com/b/yegor256/random-port)](http://www.rultor.com/p/yegor256/random-port)
-[![We recommend RubyMine](http://www.elegantobjects.org/rubymine.svg)](https://www.jetbrains.com/ruby/)
+[![DevOps By Rultor.com](https://www.rultor.com/b/yegor256/random-port)](https://www.rultor.com/p/yegor256/random-port)
+[![We recommend RubyMine](https://www.elegantobjects.org/rubymine.svg)](https://www.jetbrains.com/ruby/)
 
 [![rake](https://github.com/yegor256/random-port/actions/workflows/rake.yml/badge.svg)](https://github.com/yegor256/random-port/actions/workflows/rake.yml)
-[![Gem Version](https://badge.fury.io/rb/random-port.svg)](http://badge.fury.io/rb/random-port)
+[![Gem Version](https://badge.fury.io/rb/random-port.svg)](https://badge.fury.io/rb/random-port)
 [![Maintainability](https://api.codeclimate.com/v1/badges/349b8c31884d3b34d926/maintainability)](https://codeclimate.com/github/yegor256/random-port/maintainability)
-[![Yard Docs](http://img.shields.io/badge/yard-docs-blue.svg)](http://rubydoc.info/github/yegor256/random-port/master/frames)
+[![Yard Docs](https://img.shields.io/badge/yard-docs-blue.svg)](https://rubydoc.info/github/yegor256/random-port/master/frames)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/yegor256/random-port/blob/master/LICENSE.txt)
 [![Test Coverage](https://img.shields.io/codecov/c/github/yegor256/random-port.svg)](https://codecov.io/github/yegor256/random-port?branch=master)
 [![Hits-of-Code](https://hitsofcode.com/github/yegor256/random-port)](https://hitsofcode.com/view/github/random-port/mailanes)
