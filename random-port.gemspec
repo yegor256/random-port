@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.description = 'Reserves a random TCP port'
   s.authors = ['Yegor Bugayenko']
   s.email = 'yegor256@gmail.com'
-  s.homepage = 'http://github.com/yegor256/random-port'
+  s.homepage = 'https://github.com/yegor256/random-port'
   s.files = `git ls-files`.split($RS)
   s.rdoc_options = ['--charset=UTF-8']
   s.extra_rdoc_files = ['README.md']
