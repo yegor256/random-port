@@ -140,7 +140,11 @@ class RandomPort::Pool
   # @return [Integer] The same port number
   def take(port)
     ['127.0.0.1', '::1', '0.0.0.0', 'localhost'].each do |host|
-      TCPServer.new(host, port).close
+      begin
+        TCPServer.new(host, port).close
+      rescue Errno::EADDRNOTAVAIL
+        next
+      end
     end
     port
   end
