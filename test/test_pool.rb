@@ -167,4 +167,21 @@ class RandomPort::TestPool < Minitest::Test
     numbers = (0..total - 1).map { pool.acquire }
     assert_equal(total, numbers.uniq.count)
   end
+
+  def test_taking_port_raises_address_not_available_error
+    original_impl = TCPServer.method(:new)
+
+    raise_error_stub = lambda do |host, port|
+      raise Errno::EADDRNOTAVAIL if %w[127.0.0.1 ::1].include? host
+      original_impl.call(host, port)
+    end
+
+    TCPServer.stub(:new, raise_error_stub) do
+      pool = RandomPort::Pool.new
+      port = pool.acquire
+      refute_nil(port)
+      assert_predicate(port, :positive?)
+      pool.release(port)
+    end
+  end
 end
