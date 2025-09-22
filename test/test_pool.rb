@@ -139,13 +139,13 @@ class RandomPort::TestPool < Minitest::Test
 
   def test_acquires_unique_numbers
     total = 25
-    numbers = (0..total - 1).map { RandomPort::Pool::SINGLETON.acquire }
+    numbers = (0..(total - 1)).map { RandomPort::Pool::SINGLETON.acquire }
     assert_equal(total, numbers.uniq.count)
   end
 
   def test_acquires_unique_numbers_in_block
     total = 25
-    numbers = (0..total - 1).map do
+    numbers = (0..(total - 1)).map do
       RandomPort::Pool::SINGLETON.acquire do |port|
         port
       end
@@ -164,7 +164,7 @@ class RandomPort::TestPool < Minitest::Test
   def test_acquires_unique_numbers_in_no_sync_mode
     total = 25
     pool = RandomPort::Pool.new(sync: false)
-    numbers = (0..total - 1).map { pool.acquire }
+    numbers = (0..(total - 1)).map { pool.acquire }
     assert_equal(total, numbers.uniq.count)
   end
 

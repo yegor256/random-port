@@ -6,7 +6,7 @@ AllCops:
   TargetRubyVersion: 2.3.3
   NewCops: enable
   SuggestExtensions: false
-require:
+plugins:
   - rubocop-minitest
   - rubocop-rake
   - rubocop-performance
