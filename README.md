@@ -9,7 +9,7 @@
 [![Yard Docs](https://img.shields.io/badge/yard-docs-blue.svg)](https://rubydoc.info/github/yegor256/random-port/master/frames)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/yegor256/random-port/blob/master/LICENSE.txt)
 [![Test Coverage](https://img.shields.io/codecov/c/github/yegor256/random-port.svg)](https://codecov.io/github/yegor256/random-port?branch=master)
-[![Hits-of-Code](https://hitsofcode.com/github/yegor256/random-port)](https://hitsofcode.com/view/github/random-port/mailanes)
+[![Hits-of-Code](https://hitsofcode.com/github/yegor256/random-port)](https://hitsofcode.com/view/github/yegor256/random-port)
 
 It's a simple Ruby gem to get a random TCP port.
 

@@ -10,7 +10,10 @@ require 'socket'
 require 'threads'
 require_relative '../lib/random-port/pool'
 
-# Pool test.
+# Test suite for RandomPort::Pool.
+#
+# These tests verify that the pool correctly acquires and releases TCP ports,
+# handles thread safety, manages port limits, and properly detects busy ports.
 # Author:: Yegor Bugayenko (yegor256@gmail.com)
 # Copyright:: Copyright (c) 2018-2025 Yegor Bugayenko
 # License:: MIT
@@ -124,7 +127,7 @@ class RandomPort::TestPool < Minitest::Test
     pool = RandomPort::Pool.new
     assert_raises(StandardError) do
       pool.acquire do
-        raise 'Itended'
+        raise 'Intended'
       end
     end
     assert_predicate(pool.count, :zero?)
