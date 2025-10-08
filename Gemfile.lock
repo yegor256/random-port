@@ -20,7 +20,7 @@ GEM
     logger (1.7.0)
     loog (0.6.1)
       logger (~> 1.0)
-    minitest (5.25.5)
+    minitest (5.26.0)
     parallel (1.27.0)
     parser (3.3.9.0)
       ast (~> 2.4.1)
