@@ -6,7 +6,7 @@
 source 'https://rubygems.org'
 gemspec
 
-gem 'minitest', '~>5.25', require: false
+gem 'minitest', '~>6.0', require: false
 gem 'qbash', '~>0.2', require: false
 gem 'rake', '~>13.2', require: false
 gem 'rubocop', '~>1.75', require: false
