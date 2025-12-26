@@ -20,7 +20,8 @@ GEM
     logger (1.7.0)
     loog (0.6.1)
       logger (~> 1.0)
-    minitest (5.27.0)
+    minitest (6.0.1)
+      prism (~> 1.5)
     parallel (1.27.0)
     parser (3.3.10.0)
       ast (~> 2.4.1)
@@ -87,7 +88,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  minitest (~> 5.25)
+  minitest (~> 6.0)
   qbash (~> 0.2)
   rake (~> 13.2)
   random-port!
