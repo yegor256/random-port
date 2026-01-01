@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# SPDX-FileCopyrightText: Copyright (c) 2018-2025 Yegor Bugayenko
+# SPDX-FileCopyrightText: Copyright (c) 2018-2026 Yegor Bugayenko
 # SPDX-License-Identifier: MIT
 
 require 'minitest/autorun'
@@ -15,7 +15,7 @@ require_relative '../lib/random-port/pool'
 # These tests verify that the pool correctly acquires and releases TCP ports,
 # handles thread safety, manages port limits, and properly detects busy ports.
 # Author:: Yegor Bugayenko (yegor256@gmail.com)
-# Copyright:: Copyright (c) 2018-2025 Yegor Bugayenko
+# Copyright:: Copyright (c) 2018-2026 Yegor Bugayenko
 # License:: MIT
 class RandomPort::TestPool < Minitest::Test
   def test_acquires_and_releases
