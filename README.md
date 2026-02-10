@@ -52,6 +52,15 @@ RandomPort::Pool::SINGLETON.acquire do |port|
 end
 ```
 
+Or use shortened version, all methods called in `RandomPort`
+will be delegated to `Pool::SINGLETON`:
+
+```ruby
+RandomPort.acquire do |port|
+  # Use it here...
+end
+```
+
 The pool is thread-safe by default.
 You can configure it to be
 not-thread-safe, using optional `sync` argument of the constructor.
