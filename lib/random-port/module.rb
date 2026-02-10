@@ -13,4 +13,8 @@
 # Copyright:: Copyright (c) 2018-2026 Yegor Bugayenko
 # License:: MIT
 module RandomPort
+  extend Forwardable
+
+  def_delegators :'RandomPort::Pool::SINGLETON', :acquire, :release, :count, :size, :empty?
+  module_function :acquire, :release, :count, :size, :empty?
 end
