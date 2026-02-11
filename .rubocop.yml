@@ -3,7 +3,7 @@
 ---
 AllCops:
   DisplayCopNames: true
-  TargetRubyVersion: 2.3.3
+  TargetRubyVersion: 3.3.10
   NewCops: enable
   SuggestExtensions: false
 plugins:

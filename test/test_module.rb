@@ -16,7 +16,7 @@ class TestRandomPort < Minitest::Test
 
   def test_delegate_acquire_method_with_parameters_and_block_to_pool_singleton
     RandomPort.acquire(2, timeout: 3) do |ports|
-      ports.each { |port| assert_instance_of(Integer, port) }
+      assert_pattern { ports => [Integer, Integer] }
     end
   end
 
@@ -31,7 +31,7 @@ class TestRandomPort < Minitest::Test
 
   def test_delegate_acquire_method_with_parameters_and_without_block_to_pool_singleton
     ports = RandomPort.acquire(3, timeout: 1)
-    ports.each { |port| assert_instance_of(Integer, port) }
+    assert_pattern { ports => [Integer, Integer, Integer] }
     assert_predicate(RandomPort.size, :positive?)
     assert_predicate(RandomPort.count, :positive?)
     refute_predicate(RandomPort, :empty?)

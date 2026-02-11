@@ -134,7 +134,7 @@ class RandomPort::Pool
     end
     return nil if opts.any? { |p| @ports.include?(p) }
     d = total * (total - 1) / 2
-    return nil unless opts.inject(&:+) - (total * opts.min) == d
+    return nil unless opts.sum - (total * opts.min) == d
     @ports += opts
     opts
   end
@@ -150,21 +150,19 @@ class RandomPort::Pool
   # @raise [SocketError] If there's a socket-related error
   def take(port)
     ['127.0.0.1', '::1', '0.0.0.0', 'localhost'].each do |host|
-      begin
-        TCPServer.new(host, port).close
-      rescue Errno::EADDRNOTAVAIL
-        next
-      end
+      TCPServer.new(host, port).close
+    rescue Errno::EADDRNOTAVAIL
+      next
     end
     port
   end
 
   # Executes a block of code with or without thread synchronization.
-  # @param block The block of code to execute
+  # @yield The block of code to execute
   # @return The result of the block execution
-  def safe(&block)
+  def safe(&)
     if @sync
-      @monitor.synchronize(&block)
+      @monitor.synchronize(&)
     else
       yield
     end
