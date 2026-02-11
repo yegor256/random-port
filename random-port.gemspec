@@ -6,7 +6,7 @@
 require 'English'
 Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new('>= 0') if s.respond_to? :required_rubygems_version=
-  s.required_ruby_version = '>=2.3'
+  s.required_ruby_version = '>=3.3'
   s.name = 'random-port'
   s.version = '0.0.0'
   s.license = 'MIT'
