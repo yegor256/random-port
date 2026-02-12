@@ -3,6 +3,8 @@
 # SPDX-FileCopyrightText: Copyright (c) 2018-2026 Yegor Bugayenko
 # SPDX-License-Identifier: MIT
 
+require 'forwardable'
+
 # Main module that contains all RandomPort classes and utilities.
 #
 # This module provides a simple way to acquire random TCP ports

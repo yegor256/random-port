@@ -3,9 +3,12 @@
 # SPDX-FileCopyrightText: Copyright (c) 2018-2026 Yegor Bugayenko
 # SPDX-License-Identifier: MIT
 
+require 'os'
+require 'qbash'
 require 'rubygems'
 require 'rake'
 require 'rake/clean'
+require 'shellwords'
 
 CLEAN << 'coverage'
 
@@ -17,7 +20,7 @@ def version
   Gem::Specification.load(Dir['*.gemspec'].first).version
 end
 
-task default: %i[clean test yard rubocop]
+task default: %i[clean test picks yard rubocop]
 
 require 'rake/testtask'
 desc 'Run all unit tests'
@@ -25,6 +28,16 @@ Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test'
   test.pattern = 'test/**/test_*.rb'
   test.verbose = false
+end
+
+desc 'Run them via Ruby, one by one'
+task :picks do
+  next if OS.windows?
+  %w[test lib].each do |d|
+    Dir["#{d}/**/*.rb"].each do |f|
+      qbash("bundle exec ruby #{Shellwords.escape(f)}", stdout: $stdout, env: { 'PICKS' => 'yes' })
+    end
+  end
 end
 
 require 'rubocop/rake_task'
