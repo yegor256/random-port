@@ -25,7 +25,7 @@ require 'random-port'
 port = RandomPort::Pool.new.acquire
 ```
 
-The `Pool` guarantees that the port won't be used again.
+The `Pool` guarantees that the port isn't used again.
 You can put the port back to the pool after usage:
 
 ```ruby
@@ -52,7 +52,7 @@ end
 ```
 
 Or use shortened version, all methods called in `RandomPort`
-  will be delegated to `Pool::SINGLETON`:
+  are delegated to `Pool::SINGLETON`:
 
 ```ruby
 RandomPort.acquire do |port|
@@ -68,7 +68,7 @@ You can configure it to be not-thread-safe,
 
 Read these [guidelines].
 Make sure your build is green before you contribute your pull request.
-You will need to have [Ruby] 3.3+ and [Bundler] installed.
+You need to have [Ruby] 3.3+ and [Bundler] installed.
 Then:
 
 ```bash
