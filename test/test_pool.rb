@@ -3,11 +3,11 @@
 # SPDX-FileCopyrightText: Copyright (c) 2018-2026 Yegor Bugayenko
 # SPDX-License-Identifier: MIT
 
-require 'minitest/autorun'
 require 'qbash'
 require 'shellwords'
 require 'socket'
 require 'threads'
+require_relative 'test__helper'
 require_relative '../lib/random-port/pool'
 
 # Test suite for RandomPort::Pool.

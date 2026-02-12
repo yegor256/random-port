@@ -3,8 +3,7 @@
 # SPDX-FileCopyrightText: Copyright (c) 2018-2026 Yegor Bugayenko
 # SPDX-License-Identifier: MIT
 
-require 'minitest/autorun'
-require 'minitest/mock'
+require_relative 'test__helper'
 require_relative '../lib/random-port'
 
 # Test suite for RandomPort module.

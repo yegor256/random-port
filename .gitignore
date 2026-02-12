@@ -1,8 +1,11 @@
+# SPDX-FileCopyrightText: Copyright (c) 2025 Yegor Bugayenko
+# SPDX-License-Identifier: MIT
+
+*.gem
 .bundle/
 .DS_Store
 .idea/
 .yardoc/
-*.gem
 coverage/
 doc/
 node_modules/
