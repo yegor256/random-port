@@ -32,6 +32,7 @@ GEM
       builder
       minitest (>= 5.0)
       ruby-progressbar
+    os (1.1.4)
     parallel (1.27.0)
     parser (3.3.10.1)
       ast (~> 2.4.1)
@@ -105,6 +106,7 @@ DEPENDENCIES
   minitest (~> 6.0)
   minitest-mock (~> 5.27)
   minitest-reporters (~> 1.7)
+  os (~> 1.1)
   qbash (~> 0.2)
   rake (~> 13.2)
   random-port!

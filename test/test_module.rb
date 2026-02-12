@@ -4,6 +4,7 @@
 # SPDX-License-Identifier: MIT
 
 require 'minitest/autorun'
+require 'minitest/mock'
 require_relative '../lib/random-port'
 
 # Test suite for RandomPort module.
