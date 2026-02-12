@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new('>= 0') if s.respond_to? :required_rubygems_version=
   s.required_ruby_version = '>=3.3'
   s.name = 'random-port'
-  s.version = '0.0.0'
+  s.version = '0.8.2'
   s.license = 'MIT'
   s.summary = 'Random TCP port'
   s.description = 'Reserves a random TCP port'
