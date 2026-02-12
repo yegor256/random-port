@@ -25,8 +25,8 @@ require 'random-port'
 port = RandomPort::Pool.new.acquire
 ```
 
-The `Pool` guarantees that the port won't be used again. You can put
-the port back to the pool after usage:
+The `Pool` guarantees that the port won't be used again.
+You can put the port back to the pool after usage:
 
 ```ruby
 RandomPort::Pool.new.acquire do |port|
@@ -52,7 +52,7 @@ end
 ```
 
 Or use shortened version, all methods called in `RandomPort`
-will be delegated to `Pool::SINGLETON`:
+  will be delegated to `Pool::SINGLETON`:
 
 ```ruby
 RandomPort.acquire do |port|
@@ -61,17 +61,15 @@ end
 ```
 
 The pool is thread-safe by default.
-You can configure it to be
-not-thread-safe, using optional `sync` argument of the constructor.
+You can configure it to be not-thread-safe,
+  using optional `sync` argument of the constructor.
 
 ## How to contribute
 
-Read
-[these guidelines](https://www.yegor256.com/2014/04/15/github-guidelines.html).
-Make sure your build is green before you contribute
-your pull request. You will need to have
-[Ruby](https://www.ruby-lang.org/en/) 3.3+ and
-[Bundler](https://bundler.io/) installed. Then:
+Read these [guidelines].
+Make sure your build is green before you contribute your pull request.
+You will need to have [Ruby] 3.3+ and [Bundler] installed.
+Then:
 
 ```bash
 bundle update
@@ -79,3 +77,7 @@ bundle exec rake
 ```
 
 If it's clean and you don't see any error messages, submit your pull request.
+
+[guidelines]: https://www.yegor256.com/2014/04/15/github-guidelines.html
+[Ruby]: https://www.ruby-lang.org/en/
+[Bundler]: https://bundler.io/
