@@ -7,8 +7,8 @@ require 'qbash'
 require 'shellwords'
 require 'socket'
 require 'threads'
-require_relative 'test__helper'
 require_relative '../lib/random-port/pool'
+require_relative 'test__helper'
 
 # Test suite for RandomPort::Pool.
 #
@@ -21,8 +21,7 @@ class RandomPort::TestPool < Minitest::Test
   def test_acquires_and_releases
     pool = RandomPort::Pool.new
     port = pool.acquire
-    server = TCPServer.new('localhost', port)
-    server.close
+    TCPServer.new('localhost', port).close
     refute_nil(port)
     assert_predicate(port, :positive?)
     pool.release(port)
@@ -33,8 +32,7 @@ class RandomPort::TestPool < Minitest::Test
     assert_equal(0, pool.size)
     ports = pool.acquire(3, timeout: 16)
     ports.each do |p|
-      server = TCPServer.new('localhost', p)
-      server.close
+      TCPServer.new('localhost', p).close
     end
     assert_equal(3, pool.size)
     assert_equal(3, ports.count)
@@ -46,12 +44,12 @@ class RandomPort::TestPool < Minitest::Test
     port = RandomPort::Pool.new.acquire
     server = TCPServer.new('127.0.0.1', port)
     other = RandomPort::Pool.new(start: port).acquire
-    refute_equal(other, port)
     server.close
+    refute_equal(other, port)
   end
 
   def test_skips_externally_busy_port
-    skip 'Not supported on Windows' if Gem.win_platform?
+    skip('Not supported on Windows') if Gem.win_platform?
     ['127.0.0.1', 'localhost', '::1', '0.0.0.0'].each do |host|
       Dir.mktmpdir do |home|
         port = RandomPort::Pool.new.acquire
@@ -95,19 +93,19 @@ class RandomPort::TestPool < Minitest::Test
       assert_equal(3, ports.count)
       assert_equal(3, pool.size)
       ports.each do |p|
-        server = TCPServer.new('localhost', p)
-        server.close
+        TCPServer.new('localhost', p).close
       end
     end
     assert_equal(0, pool.size)
   end
 
   def test_acquires_and_releases_in_block
-    result = RandomPort::Pool.new.acquire do |port|
-      refute_nil(port)
-      assert_predicate(port, :positive?)
-      123
-    end
+    result =
+      RandomPort::Pool.new.acquire do |port|
+        refute_nil(port)
+        assert_predicate(port, :positive?)
+        123
+      end
     assert_equal(123, result)
   end
 
@@ -116,8 +114,7 @@ class RandomPort::TestPool < Minitest::Test
     Threads.new(100).assert do
       pool.acquire(5) do |ports|
         ports.each do |p|
-          server = TCPServer.new('localhost', p)
-          server.close
+          TCPServer.new('localhost', p).close
         end
       end
     end
@@ -127,7 +124,7 @@ class RandomPort::TestPool < Minitest::Test
     pool = RandomPort::Pool.new
     assert_raises(StandardError) do
       pool.acquire do
-        raise 'Intended'
+        raise(StandardError, 'Intended')
       end
     end
     assert_predicate(pool.count, :zero?)
@@ -142,24 +139,26 @@ class RandomPort::TestPool < Minitest::Test
 
   def test_acquires_unique_numbers
     total = 25
-    numbers = (0..(total - 1)).map { RandomPort::Pool::SINGLETON.acquire }
-    assert_equal(total, numbers.uniq.count)
+    nums = (0..(total - 1)).map { RandomPort::Pool::SINGLETON.acquire }
+    nums.uniq!
+    assert_equal(total, nums.count)
   end
 
   def test_acquires_unique_numbers_in_block
     total = 25
-    numbers = (0..(total - 1)).map do
-      RandomPort::Pool::SINGLETON.acquire do |port|
-        port
+    numbers =
+      (0..(total - 1)).map do
+        RandomPort::Pool::SINGLETON.acquire do |port|
+          port
+        end
       end
-    end
     assert_equal(total, numbers.uniq.count)
   end
 
   def test_raises_when_too_many
     pool = RandomPort::Pool.new(limit: 1)
     pool.acquire
-    assert_raises RandomPort::Pool::Timeout do
+    assert_raises(RandomPort::Pool::Timeout) do
       pool.acquire(timeout: 0.1)
     end
   end
@@ -167,19 +166,19 @@ class RandomPort::TestPool < Minitest::Test
   def test_acquires_unique_numbers_in_no_sync_mode
     total = 25
     pool = RandomPort::Pool.new(sync: false)
-    numbers = (0..(total - 1)).map { pool.acquire }
-    assert_equal(total, numbers.uniq.count)
+    nums = (0..(total - 1)).map { pool.acquire }
+    nums.uniq!
+    assert_equal(total, nums.count)
   end
 
-  def test_taking_port_raises_address_not_available_error
-    original_impl = TCPServer.method(:new)
-
-    raise_error_stub = lambda do |host, port|
-      raise Errno::EADDRNOTAVAIL if %w[127.0.0.1 ::1].include? host
-      original_impl.call(host, port)
-    end
-
-    TCPServer.stub(:new, raise_error_stub) do
+  def test_skips_addr_not_available_error
+    impl = TCPServer.method(:new)
+    stub =
+      lambda do |host, port|
+        raise(Errno::EADDRNOTAVAIL) if %w[127.0.0.1 ::1].include?(host)
+        impl.call(host, port)
+      end
+    TCPServer.stub(:new, stub) do
       pool = RandomPort::Pool.new
       port = pool.acquire
       refute_nil(port)

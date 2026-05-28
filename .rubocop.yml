@@ -10,6 +10,7 @@ plugins:
   - rubocop-minitest
   - rubocop-rake
   - rubocop-performance
+  - rubocop-elegant
 Minitest/EmptyLineBeforeAssertionMethods:
   Enabled: false
 Layout/EmptyLineAfterGuardClause:
@@ -34,3 +35,11 @@ Metrics/AbcSize:
   Max: 60
 Metrics/ClassLength:
   Max: 160
+Elegant/ClassInModule:
+  Exclude:
+    - 'lib/**/*'
+    - '**/test_*.rb'
+    - '**/*Test.rb'
+Elegant/NoRedundantVariable:
+  Exclude:
+    - 'test/**/*'

@@ -31,7 +31,6 @@ class RandomPort::Pool
   # Raised when a port cannot be acquired within the timeout period.
   class Timeout < StandardError; end
 
-  # @return [Integer] The maximum number of ports that can be acquired from this pool
   attr_reader :limit
 
   # Constructor.
@@ -46,7 +45,6 @@ class RandomPort::Pool
     @next = start
   end
 
-  # Application-wide singleton pool of ports.
   SINGLETON = RandomPort::Pool.new
 
   # Returns the number of ports currently acquired from the pool.
@@ -78,11 +76,12 @@ class RandomPort::Pool
     attempt = 0
     loop do
       if Time.now > start + timeout
-        raise \
+        raise(
           Timeout,
           "Can't find a place in the pool of #{@limit} ports " \
           "(#{@ports.size} already occupied) " \
           "for #{total} port(s), after #{attempt} attempts in #{start.ago}"
+        )
       end
       attempt += 1
       opts = safe { group(total) }
@@ -96,7 +95,7 @@ class RandomPort::Pool
       opts = opts[0] if total == 1
       return opts unless block_given?
       begin
-        return yield opts
+        return yield(opts)
       ensure
         release(opts)
       end
@@ -122,19 +121,17 @@ class RandomPort::Pool
   # @param [Integer] total The number of ports to acquire
   # @return [Array<Integer>|nil] An array of port numbers if successful, nil otherwise
   def group(total)
-    return nil if @ports.count + total > @limit
+    return if @ports.count + total > @limit
     opts = Array.new(total, 0)
     begin
       (0..(total - 1)).each do |i|
-        port = i.zero? ? @next : opts[i - 1] + 1
-        opts[i] = take(port)
+        opts[i] = take((i.zero? ? @next : opts[i - 1] + 1))
       end
     rescue Errno::EADDRINUSE, SocketError
-      return nil
+      return
     end
-    return nil if opts.any? { |p| @ports.include?(p) }
-    d = total * (total - 1) / 2
-    return nil unless opts.sum - (total * opts.min) == d
+    return if opts.any? { |p| @ports.include?(p) }
+    return unless opts.sum - (total * opts.min) == (total * (total - 1) / 2)
     @ports += opts
     opts
   end

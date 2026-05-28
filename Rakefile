@@ -5,9 +5,9 @@
 
 require 'os'
 require 'qbash'
-require 'rubygems'
 require 'rake'
 require 'rake/clean'
+require 'rubygems'
 require 'shellwords'
 
 CLEAN << 'coverage'
