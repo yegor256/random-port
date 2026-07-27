@@ -18,7 +18,7 @@ GEM
       loog (~> 0.6)
       tago (~> 0.1)
     ellipsized (0.3.0)
-    json (2.19.5)
+    json (2.19.9)
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
     logger (1.7.0)
