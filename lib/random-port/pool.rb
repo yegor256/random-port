@@ -130,7 +130,7 @@ class RandomPort::Pool
     rescue Errno::EADDRINUSE, SocketError
       return
     end
-    return if opts.any? { |p| @ports.include?(p) }
+    return if opts.intersect?(@ports)
     return unless opts.sum - (total * opts.min) == (total * (total - 1) / 2)
     @ports += opts
     opts
