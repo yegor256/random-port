@@ -42,6 +42,7 @@ class RandomPort::Pool
     @sync = sync
     @monitor = Monitor.new
     @limit = limit
+    @start = start
     @next = start
   end
 
@@ -90,7 +91,7 @@ class RandomPort::Pool
       else
         @next = opts.max + 1
       end
-      @next = 0 if @next > 65_535
+      @next = @start if @next > 65_535
       next if opts.nil?
       opts = opts[0] if total == 1
       return opts unless block_given?

@@ -186,4 +186,25 @@ class RandomPort::TestPool < Minitest::Test
       pool.release(port)
     end
   end
+
+  def test_wraps_around_to_start_instead_of_zero
+    fake =
+      Class.new do
+        def close; end
+      end
+    stub =
+      lambda do |_host, _port|
+        fake.new
+      end
+    TCPServer.stub(:new, stub) do
+      pool = RandomPort::Pool.new(start: 65_530)
+      ports = (0..9).map { pool.acquire { |p| p } }
+      assert_equal(10, ports.count)
+      ports.each do |p|
+        refute_equal(0, p)
+        assert_predicate(p, :positive?)
+        assert_operator(p, :>=, 65_530)
+      end
+    end
+  end
 end
