@@ -27,6 +27,15 @@ class RandomPort::TestPool < Minitest::Test
     pool.release(port)
   end
 
+  def test_release_returns_nil
+    pool = RandomPort::Pool.new
+    port = pool.acquire
+    assert_equal(1, pool.size)
+    assert_nil(pool.release(port))
+    assert_equal(0, pool.size)
+    assert_nil(pool.release(port))
+  end
+
   def test_acquires_and_releases_three_ports
     pool = RandomPort::Pool.new(limit: 3)
     assert_equal(0, pool.size)
