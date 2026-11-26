@@ -72,6 +72,13 @@ class RandomPort::Pool
   # @return [Integer|Array<Integer>] The acquired port(s) if no block given
   # @raise [Timeout] If ports cannot be acquired within the timeout period
   def acquire(total = 1, timeout: 4)
+    unless total.is_a?(Integer) && total.positive?
+      raise(
+        ArgumentError,
+        'The number of ports to acquire must be a positive integer, ' \
+        "but #{total.inspect} was provided"
+      )
+    end
     start = Time.now
     attempt = 0
     loop do
