@@ -179,6 +179,22 @@ class RandomPort::TestPool < Minitest::Test
     end
   end
 
+  def test_rejects_zero_limit
+    error =
+      assert_raises(ArgumentError) do
+        RandomPort::Pool.new(limit: 0)
+      end
+    assert_match(/positive integer/, error.message)
+  end
+
+  def test_rejects_negative_limit
+    error =
+      assert_raises(ArgumentError) do
+        RandomPort::Pool.new(limit: -1)
+      end
+    assert_match(/positive integer/, error.message)
+  end
+
   def test_acquires_unique_numbers_in_no_sync_mode
     total = 25
     pool = RandomPort::Pool.new(sync: false)
