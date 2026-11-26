@@ -155,6 +155,22 @@ class RandomPort::TestPool < Minitest::Test
     assert_equal(total, numbers.uniq.count)
   end
 
+  def test_rejects_zero_ports
+    pool = RandomPort::Pool.new
+    error =
+      assert_raises(ArgumentError) do
+        pool.acquire(0)
+      end
+    assert_match(/positive integer/, error.message)
+  end
+
+  def test_rejects_negative_ports
+    pool = RandomPort::Pool.new
+    assert_raises(ArgumentError) do
+      pool.acquire(-1)
+    end
+  end
+
   def test_raises_when_too_many
     pool = RandomPort::Pool.new(limit: 1)
     pool.acquire
