@@ -120,6 +120,7 @@ class RandomPort::Pool
       else
         @ports.delete(port)
       end
+      return
     end
   end
 
