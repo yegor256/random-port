@@ -37,7 +37,15 @@ class RandomPort::Pool
   # @param [Boolean] sync Set to FALSE if you want this pool to be non-thread-safe
   # @param [Integer] limit The maximum number of ports that can be acquired from the pool
   # @param [Integer] start The first port number to try when acquiring
+  # @raise [ArgumentError] If start is outside the usable TCP port range 1..65535
   def initialize(sync: true, limit: 65_536, start: 1025)
+    unless start.is_a?(Integer) && (1..65_535).cover?(start)
+      raise(
+        ArgumentError,
+        'The start port must be an integer between 1 and 65535, ' \
+        "but #{start.inspect} was provided"
+      )
+    end
     @ports = []
     @sync = sync
     @monitor = Monitor.new

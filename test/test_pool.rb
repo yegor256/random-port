@@ -223,4 +223,28 @@ class RandomPort::TestPool < Minitest::Test
       end
     end
   end
+
+  def test_rejects_zero_start
+    error =
+      assert_raises(ArgumentError) do
+        RandomPort::Pool.new(start: 0)
+      end
+    assert_match(/between 1 and 65535/, error.message)
+  end
+
+  def test_rejects_negative_start
+    error =
+      assert_raises(ArgumentError) do
+        RandomPort::Pool.new(start: -1)
+      end
+    assert_match(/between 1 and 65535/, error.message)
+  end
+
+  def test_rejects_start_above_port_range
+    error =
+      assert_raises(ArgumentError) do
+        RandomPort::Pool.new(start: 65_536)
+      end
+    assert_match(/between 1 and 65535/, error.message)
+  end
 end
