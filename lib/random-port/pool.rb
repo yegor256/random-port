@@ -38,6 +38,13 @@ class RandomPort::Pool
   # @param [Integer] limit The maximum number of ports that can be acquired from the pool
   # @param [Integer] start The first port number to try when acquiring
   def initialize(sync: true, limit: 65_536, start: 1025)
+    unless limit.is_a?(Integer) && limit.positive?
+      raise(
+        ArgumentError,
+        'The limit of ports to acquire must be a positive integer, ' \
+        "but #{limit.inspect} was provided"
+      )
+    end
     @ports = []
     @sync = sync
     @monitor = Monitor.new
